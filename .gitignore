@@ -1,5 +1,12 @@
- .jshintrc
- .sublime-project
- .tern-project
- /node_modules
- 
+.DS_Store
+doc
+node_modules
+.vscode
+.nyc_output
+reports
+*.log
+npm-debug.log*
+.idea
+coverage
+dist
+/.rpt2_cache/
