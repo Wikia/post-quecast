@@ -1,4 +1,5 @@
 import { TestScheduler } from 'rxjs/testing';
+import { PostMessageEvent } from '../models/post-message-event';
 import { onlyPrivate } from './only-private';
 
 describe('RxJs - onlyPrivate', () => {
@@ -12,10 +13,10 @@ describe('RxJs - onlyPrivate', () => {
 
   it('should filter by private', () => {
     scheduler.run(({ cold, expectObservable }) => {
-      const stream$ = cold('-a-b-c-', {
-        a: { data: { private: true } },
-        b: { data: {} },
-        c: { data: { private: false } },
+      const stream$ = cold<PostMessageEvent>('-a-b-c-', {
+        a: { data: { private: true } } as any,
+        b: { data: {} } as any,
+        c: { data: { private: false } } as any,
       });
 
       expectObservable(stream$.pipe(onlyPrivate())).toBe('-a-----', {

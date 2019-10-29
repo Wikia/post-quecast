@@ -1,4 +1,5 @@
 import { TestScheduler } from 'rxjs/testing';
+import { PostMessageEvent } from '../models/post-message-event';
 import { mapAction } from './map-action';
 
 describe('RxJs - mapAction', () => {
@@ -12,10 +13,10 @@ describe('RxJs - mapAction', () => {
 
   it('should map event to action', () => {
     scheduler.run(({ cold, expectObservable }) => {
-      const stream$ = cold('-a-b-c-', {
-        a: { data: { action: { type: '1' } } },
-        b: { data: { action: { type: '2' } } },
-        c: { data: { action: { type: '1', foo: 'bar' } } },
+      const stream$ = cold<PostMessageEvent>('-a-b-c-', {
+        a: { data: { action: { type: '1' } } } as any,
+        b: { data: { action: { type: '2' } } } as any,
+        c: { data: { action: { type: '1', foo: 'bar' } } } as any,
       });
 
       expectObservable(stream$.pipe(mapAction())).toBe('-a-b-c-', {
