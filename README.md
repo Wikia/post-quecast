@@ -67,7 +67,7 @@ import { Communicator } from '@wikia/post-quecast';
 const communicator = new Communicator();
 
 communicator.actions$.subscribe(console.log);
-communicator.emit({ type: 'action name', ...payload });
+communicator.dispatch({ type: 'action name', ...payload });
 ```
 
 ## Restrictions

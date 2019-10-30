@@ -6,12 +6,12 @@ import { Transmitter } from './transmitter';
 describe('Transmitter', () => {
   const dateMock = jest.spyOn(Date, 'now');
 
-  it('should emit on coordinator host', () => {
+  it('should dispatch on coordinator host', () => {
     const coordinatorHost = createHostMock();
     const transmitter = new Transmitter({ coordinatorHost });
 
     dateMock.mockReturnValue(10);
-    transmitter.emit({ type: 'message' });
+    transmitter.dispatch({ type: 'message' });
 
     expect(coordinatorHost.postMessage).toHaveBeenCalledTimes(1);
     expect(coordinatorHost.postMessage.mock.calls[0][0]).toEqual({
@@ -30,7 +30,7 @@ describe('Transmitter', () => {
     const transmitter = new Transmitter();
 
     dateMock.mockReturnValue(10);
-    transmitter.emit({ type: 'message' });
+    transmitter.dispatch({ type: 'message' });
 
     expect(postMessageSpy).toHaveBeenCalledTimes(1);
     expect(postMessageSpy.mock.calls[0][0]).toEqual({

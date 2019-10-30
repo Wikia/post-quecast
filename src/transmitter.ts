@@ -12,7 +12,7 @@ export class Transmitter {
     };
   }
 
-  emit<T>(action: Action<T>): void {
+  dispatch<T>(action: Action<T>): void {
     this.options.coordinatorHost.postMessage(
       {
         action: {

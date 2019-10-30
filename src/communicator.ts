@@ -20,7 +20,7 @@ export class Communicator {
     this.actions$ = this.receiver.actions$;
   }
 
-  emit<T>(action: Action<T>): void {
-    this.transmitter.emit(action);
+  dispatch<T>(action: Action<T>): void {
+    this.transmitter.dispatch(action);
   }
 }

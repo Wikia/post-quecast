@@ -43,11 +43,13 @@ describe('Communicator', () => {
       expect(receiverMock.mock.instances.length).toBe(1);
     });
 
-    it('should emit through transmitter', () => {
-      communicator.emit({ type: 'message' });
+    it('should dispatch through transmitter', () => {
+      communicator.dispatch({ type: 'message' });
 
-      expect(transmitterMock.mock.instances[0].emit).toHaveBeenCalledTimes(1);
-      expect(transmitterMock.mock.instances[0].emit.mock.calls[0][0]).toEqual({ type: 'message' });
+      expect(transmitterMock.mock.instances[0].dispatch).toHaveBeenCalledTimes(1);
+      expect(transmitterMock.mock.instances[0].dispatch.mock.calls[0][0]).toEqual({
+        type: 'message',
+      });
     });
 
     it('should bind actions$', () => {
