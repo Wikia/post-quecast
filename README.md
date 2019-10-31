@@ -10,14 +10,17 @@
     <a href="https://github.com/prettier/prettier">
         <img alt="Travis" src="https://img.shields.io/badge/styled_with-prettier-ff69b4.svg">
     </a>
+    <a href="https://renovatebot.com/">
+        <img alt="Renovate" src="https://img.shields.io/badge/renovate-enabled-brightgreen.svg">
+    </a>
     <a href="https://github.com/semantic-release/semantic-release">
         <img alt="Travis" src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg">
     </a>
 </p>
 
 <p align="center">
-    <a href="https://travis-ci.org/Wikia/post-quecast">
-        <img alt="Travis" src="https://travis-ci.org/Wikia/post-quecast.svg?branch=master">
+    <a href="https://travis-ci.com/Wikia/post-quecast">
+        <img alt="Travis" src="https://travis-ci.com/Wikia/post-quecast.svg?branch=master">
     </a>
     <a href="https://coveralls.io/github/Wikia/post-quecast?branch=master">
         <img alt="Travis" src="https://coveralls.io/repos/github/Wikia/post-quecast/badge.svg?branch=master">
@@ -41,7 +44,6 @@ It is heavily inspired by [Redux](https://redux.js.org/) and [NgRx](https://ngrx
 - [Restrictions](#restrictions)
 
 ## Installation
-
 
 To install post-quecast:
 
