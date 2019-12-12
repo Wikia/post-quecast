@@ -72,6 +72,8 @@ communicator.actions$.subscribe(console.log);
 communicator.dispatch({ type: 'action name', ...payload });
 ```
 
+More detailed explanation can be found in [API section](./docs/README.md).
+
 ## Restrictions
 
 - `setupPostQuecast` needs to be called before anything else.
