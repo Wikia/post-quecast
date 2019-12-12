@@ -8,8 +8,8 @@ notifications:
   email: false
 
 node_js:
+  - '12'
   - '10'
-  - '8'
 
 install: npm ci
 script:
