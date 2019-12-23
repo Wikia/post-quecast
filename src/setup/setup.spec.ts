@@ -37,16 +37,12 @@ describe('setupPostQuecast', () => {
     expect((host2 as any)[LIB_ID] instanceof Coordinator);
   });
 
-  it('should work only once for one host', () => {
+  it('should be idempotent', () => {
     const hostStub = createHostMock();
 
     setupPostQuecast(hostStub);
+    setupPostQuecast(hostStub);
 
-    try {
-      setupPostQuecast(hostStub);
-      expect(false).toBe(true);
-    } catch (e) {
-      expect(e.message).toMatch('You can only setup Post Quecast once on given host.');
-    }
+    expect(Coordinator).toHaveBeenCalledTimes(1);
   });
 });
