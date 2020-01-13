@@ -69,7 +69,7 @@
     "semantic-release": "15.13.27",
     "source-map-support": "0.5.13",
     "ts-jest": "24.1.0",
-    "ts-node": "8.4.1",
+    "ts-node": "8.6.2",
     "tslint": "5.20.0",
     "tslint-config-prettier": "1.18.0",
     "typescript": "3.6.4"
