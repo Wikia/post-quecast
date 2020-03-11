@@ -1,20 +1,36 @@
+import { Sender } from './connectors/sender';
+import { createSenderStub } from './connectors/sender.stub';
 import { LIB_ID } from './models/constants';
-import { createHostMock } from './models/host.mock';
+import { createHostStub } from './models/host.stub';
 import { DEFAULT_OPTIONS } from './models/options';
 import { Transmitter } from './transmitter';
 
 describe('Transmitter', () => {
   const dateMock = jest.spyOn(Date, 'now');
+  let senderFactory: jest.SpyInstance;
+
+  beforeEach(() => {
+    senderFactory = jest.spyOn(Sender, 'make');
+  });
+
+  afterEach(() => {
+    senderFactory.mockClear();
+  });
 
   it('should dispatch on coordinator host', () => {
-    const coordinatorHost = createHostMock();
+    const coordinatorHost = createHostStub();
+    const senderStub = createSenderStub();
+    senderFactory.mockImplementation(() => senderStub);
     const transmitter = new Transmitter({ coordinatorHost });
+
+    expect(senderFactory.mock.calls[0][0].coordinatorHost).toBe(coordinatorHost);
+    expect(senderFactory.mock.calls[0][0].host).toBe(DEFAULT_OPTIONS.host);
 
     dateMock.mockReturnValue(10);
     transmitter.dispatch({ type: 'message' });
 
-    expect(coordinatorHost.postMessage).toHaveBeenCalledTimes(1);
-    expect(coordinatorHost.postMessage.mock.calls[0][0]).toEqual({
+    expect(senderStub.postMessage).toHaveBeenCalledTimes(1);
+    expect(senderStub.postMessage.mock.calls[0][0]).toEqual({
       action: {
         type: 'message',
         timestamp: 10,
@@ -25,22 +41,11 @@ describe('Transmitter', () => {
     });
   });
 
-  it('should work with default options', () => {
-    const postMessageSpy = jest.spyOn(window, 'postMessage');
+  it('should pass default options', () => {
     const transmitter = new Transmitter();
 
-    dateMock.mockReturnValue(10);
-    transmitter.dispatch({ type: 'message' });
-
-    expect(postMessageSpy).toHaveBeenCalledTimes(1);
-    expect(postMessageSpy.mock.calls[0][0]).toEqual({
-      action: {
-        type: 'message',
-        timestamp: 10,
-      },
-      channelId: DEFAULT_OPTIONS.channelId,
-      private: true,
-      libId: LIB_ID,
-    });
+    expect(transmitter).toBeDefined();
+    expect(senderFactory.mock.calls[0][0].coordinatorHost).toBe(DEFAULT_OPTIONS.coordinatorHost);
+    expect(senderFactory.mock.calls[0][0].host).toBe(DEFAULT_OPTIONS.host);
   });
 });

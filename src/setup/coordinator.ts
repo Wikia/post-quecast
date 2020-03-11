@@ -1,21 +1,25 @@
-import { fromEvent, Observable } from 'rxjs';
+import { merge, Observable } from 'rxjs';
+import { NativeListener, RxListener } from '../connectors/listener';
 import { INTERNAL_TYPES } from '../models/constants';
 import { Host } from '../models/host';
 import { PostMessageEvent } from '../models/post-message-event';
 import { ofEventType } from '../rxjs/of-event-type';
 import { onlyExternal } from '../rxjs/only-external';
 import { onlyPrivate } from '../rxjs/only-private';
-import { onlyValidMessages } from '../rxjs/only-valid-messages';
 import { Channel } from './channel';
 
 export class Coordinator {
   private channels = new Map<string, Channel>();
-  private messages$: Observable<PostMessageEvent> = fromEvent(this.host, 'message').pipe(
-    onlyValidMessages(),
-    onlyPrivate(),
-  );
+  private messages$: Observable<PostMessageEvent> = this.createMessages();
 
   constructor(private host: Host) {}
+
+  private createMessages(): Observable<PostMessageEvent> {
+    return merge(
+      NativeListener.make(this.host).messages$,
+      RxListener.make(this.host).messages$,
+    ).pipe(onlyPrivate());
+  }
 
   init(): void {
     this.handleConnect();
@@ -24,7 +28,7 @@ export class Coordinator {
 
   private handleConnect(): void {
     this.messages$.pipe(ofEventType(INTERNAL_TYPES.connect)).subscribe(event => {
-      const channel: Channel = this.getChannel(event.data.channelId);
+      const channel: Channel = this.ensureChannel(event.data.channelId);
 
       channel.addConnection(event.source);
     });
@@ -32,13 +36,13 @@ export class Coordinator {
 
   private handleBroadcast(): void {
     this.messages$.pipe(onlyExternal()).subscribe(event => {
-      const channel: Channel = this.getChannel(event.data.channelId);
+      const channel: Channel = this.ensureChannel(event.data.channelId);
 
       channel.broadcast(event.data.action);
     });
   }
 
-  private getChannel(channelId: string): Channel {
+  private ensureChannel(channelId: string): Channel {
     if (!this.channels.has(channelId)) {
       this.channels.set(channelId, new Channel(channelId, this.host));
     }

@@ -20,9 +20,9 @@
       {
         "order": [
           "static-field",
+          "static-method",
           "instance-field",
           "constructor",
-          "static-method",
           "instance-method"
         ]
       }

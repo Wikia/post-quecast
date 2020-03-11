@@ -4,3 +4,4 @@ export const INTERNAL_TYPES = {
 };
 
 export const LIB_ID = '@wikia/post-quecast';
+export const LIB_SUBJECT = '@wikia/post-quecast/subject';

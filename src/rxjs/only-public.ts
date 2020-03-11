@@ -1,9 +1,10 @@
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { PostMessageEvent } from '../models/post-message-event';
+import { RxJsOperator } from './rxjs-operator';
 
-export const onlyPublic = () => (
-  source: Observable<PostMessageEvent>,
-): Observable<PostMessageEvent> => {
-  return source.pipe(filter(event => !event.data.private));
-};
+export function onlyPublic(): RxJsOperator<PostMessageEvent> {
+  return (source: Observable<PostMessageEvent>): Observable<PostMessageEvent> => {
+    return source.pipe(filter(event => !event.data.private));
+  };
+}

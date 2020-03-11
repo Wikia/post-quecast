@@ -5,19 +5,17 @@ import { Receiver } from './receiver';
 import { Transmitter } from './transmitter';
 
 export class Communicator {
-  actions$: Observable<Action>;
-  private readonly options: PostQuecastOptions;
-  private transmitter: Transmitter;
-  private receiver: Receiver;
+  readonly actions$: Observable<Action>;
+  private readonly transmitter: Transmitter;
 
-  constructor(options: Partial<PostQuecastOptions> = {}) {
-    this.options = {
+  constructor(_options: Partial<PostQuecastOptions> = {}) {
+    const options: PostQuecastOptions = {
       ...DEFAULT_OPTIONS,
-      ...options,
+      ..._options,
     };
-    this.transmitter = new Transmitter(this.options);
-    this.receiver = new Receiver(this.options);
-    this.actions$ = this.receiver.actions$;
+
+    this.transmitter = new Transmitter(options);
+    this.actions$ = new Receiver(options).actions$;
   }
 
   dispatch<T>(action: Action<T>): void {
