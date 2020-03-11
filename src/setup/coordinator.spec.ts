@@ -1,5 +1,6 @@
 import { INTERNAL_TYPES, LIB_ID } from '../models/constants';
-import { createHostMock, HostMock } from '../models/host.mock';
+import { createHostStub, HostStub } from '../models/host.stub';
+
 import { PostMessageData } from '../models/post-message-data';
 import { Channel } from './channel';
 import { Coordinator } from './coordinator';
@@ -8,11 +9,11 @@ jest.mock('./channel');
 
 describe('Coordinator', () => {
   const channelMock: jest.Mock = Channel as any;
-  let hostStub: HostMock;
+  let hostStub: HostStub;
 
   beforeEach(() => {
     channelMock.mockClear();
-    hostStub = createHostMock();
+    hostStub = createHostStub();
     new Coordinator(hostStub).init();
   });
 

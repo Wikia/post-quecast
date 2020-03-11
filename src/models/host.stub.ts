@@ -1,22 +1,27 @@
+import { Subject } from 'rxjs';
+import { LIB_SUBJECT } from './constants';
 import { Host } from './host';
 import { PostMessageEvent } from './post-message-event';
 
 type Callback = (event: PostMessageEvent) => void;
-export type HostMock = { [key in keyof Host]: jest.SpyInstance & Host[key] } & {
+export type HostStub = {
+  [key in keyof Omit<Host, '@wikia/post-quecast/subject'>]: jest.SpyInstance & Host[key];
+} & {
   listeners: Callback[];
+  ['@wikia/post-quecast/subject']: Host['@wikia/post-quecast/subject'];
 };
 
-export function createHostMock(): HostMock {
-  const result: HostMock = {} as any;
+export function createHostStub(): HostStub {
+  const result: HostStub = {} as any;
   const listeners: Callback[] = [];
 
-  const addEventListener: HostMock['addEventListener'] = jest
+  const addEventListener: HostStub['addEventListener'] = jest
     .fn()
     .mockImplementation((type: string, listener: Callback) => {
       listeners.push(listener);
     });
 
-  const removeEventListener: HostMock['removeEventListener'] = jest
+  const removeEventListener: HostStub['removeEventListener'] = jest
     .fn()
     .mockImplementation((listener: Callback) => {
       const index = listeners.findIndex(value => value === listener);
@@ -26,7 +31,7 @@ export function createHostMock(): HostMock {
       }
     });
 
-  const postMessage: HostMock['postMessage'] = jest
+  const postMessage: HostStub['postMessage'] = jest
     .fn()
     .mockImplementation((data: any, origin: string) => {
       listeners.forEach(listener => {
@@ -38,6 +43,7 @@ export function createHostMock(): HostMock {
   result.addEventListener = addEventListener;
   result.removeEventListener = removeEventListener;
   result.postMessage = postMessage;
+  result[LIB_SUBJECT] = new Subject<PostMessageEvent>();
 
   return result;
 }

@@ -1,5 +1,5 @@
 import { Communicator } from './communicator';
-import { createHostMock, HostMock } from './models/host.mock';
+import { createHostStub, HostStub } from './models/host.stub';
 import { DEFAULT_OPTIONS } from './models/options';
 import { Receiver } from './receiver';
 import { Transmitter } from './transmitter';
@@ -28,10 +28,10 @@ describe('Communicator', () => {
 
   describe('Implementation', () => {
     let communicator: Communicator;
-    let host: HostMock;
+    let host: HostStub;
 
     beforeEach(() => {
-      host = createHostMock();
+      host = createHostStub();
       communicator = new Communicator({ host, coordinatorHost: host });
     });
 
