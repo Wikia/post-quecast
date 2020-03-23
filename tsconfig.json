@@ -1,7 +1,5 @@
 {
   "compilerOptions": {
-    "declaration": true,
-    "declarationDir": "dist/types",
     "outDir": "dist/commonjs",
     "lib": ["es2017", "dom"],
     "noFallthroughCasesInSwitch": true,

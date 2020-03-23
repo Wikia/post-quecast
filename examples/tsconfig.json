@@ -1,0 +1,15 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "sourceMap": true,
+    "noImplicitAny": false,
+    "baseUrl": ".",
+    "paths": {
+      "@wikia/post-quecast": ["../src/index.ts"],
+      "common": ["./common/*"]
+    },
+    "types": []
+  },
+  "include": ["."]
+}

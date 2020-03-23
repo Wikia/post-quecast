@@ -1,0 +1,77 @@
+<html>
+  <head>
+    <title>PostQuecast - Main</title>
+    <script src="index.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css" />
+  </head>
+  <body>
+    <section class="hero is-primary">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">
+            Main
+          </h1>
+          <h2 class="subtitle">
+            Top Level Window
+          </h2>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin: 15px;">
+      <button class="button" id="setup-post-quecast">Setup Post Quecast</button>
+      <button class="button" id="close-full">Close Full</button>
+      <button class="button" id="close-lite">Close Lite</button>
+    </section>
+
+    <div class="columns" id="controls" style="margin-left: 0; margin-right: 0;"></div>
+
+    <div class="columns">
+      <section class="column">
+        <section class="hero is-primary">
+          <div class="hero-body">
+            <div class="container">
+              <h1 class="title">
+                IFrame Full
+              </h1>
+              <h2 class="subtitle">
+                IFrame with send and receive capabilities
+              </h2>
+            </div>
+          </div>
+        </section>
+        <iframe
+          id="iframe-full"
+          src="http://localhost:8080/iframe-full"
+          width="100%"
+          height="1000px"
+          allowfullscreen
+          sandbox="allow-forms allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation"
+        ></iframe>
+      </section>
+
+      <section class="column">
+        <section class="hero is-primary">
+          <div class="hero-body">
+            <div class="container">
+              <h1 class="title">
+                IFrame Lite
+              </h1>
+              <h2 class="subtitle">
+                IFrame with only send capabilities
+              </h2>
+            </div>
+          </div>
+        </section>
+        <iframe
+          id="iframe-lite"
+          src="http://localhost:8080/iframe-lite"
+          width="100%"
+          height="1000px"
+          allowfullscreen
+          sandbox="allow-forms allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation"
+        ></iframe>
+      </section>
+    </div>
+  </body>
+</html>
