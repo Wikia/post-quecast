@@ -38,13 +38,13 @@ describe('Sender', () => {
       const rxSender = RxSender.make(host1);
       const results: PostMessageEvent[] = [];
 
-      host1[LIB_SUBJECT].subscribe(value => results.push(value));
+      host1[LIB_SUBJECT].subscribe((value) => results.push(value));
 
       rxSender.postMessage(message1);
       rxSender.postMessage(message2);
 
       expect(results.length).toBe(2);
-      expect(results.map(result => result.data.action.type)).toEqual(['test1', 'test2']);
+      expect(results.map((result) => result.data.action.type)).toEqual(['test1', 'test2']);
       expect(results[0].source).toBe(results[1].source);
       expect(results[0].source).toBe(host1);
     });
@@ -65,15 +65,6 @@ describe('Sender', () => {
       nativeSender.postMessage(message2);
       expect(host1.postMessage).toHaveBeenCalledTimes(1);
       expect(host1.postMessage).toHaveBeenCalledWith(message2, '*');
-    });
-
-    it('should fail silently so that not serializable messages pass', () => {
-      const nativeSender = NativeSender.make(host1);
-
-      host1.postMessage.mockImplementation(() => {
-        throw new Error();
-      });
-      nativeSender.postMessage(makeMessageData('test'));
     });
   });
 
