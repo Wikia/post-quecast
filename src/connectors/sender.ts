@@ -37,10 +37,6 @@ export class NativeSender implements Sender {
   private constructor(private host: Host) {}
 
   postMessage(message: PostMessageData): void {
-    try {
-      this.host.postMessage(message, '*');
-    } catch (e) {
-      // fail silently if not serializable message
-    }
+    this.host.postMessage(message, '*');
   }
 }

@@ -47,17 +47,21 @@ const targets = {
     output: { file: pkg.module, format: 'esm', sourcemap: true },
     watch: { include: 'src/**' },
     external,
-    plugins: [...commonPlugins, typescript({ useTsconfigDeclarationDir: true }), markAsPure()],
+    plugins: [
+      ...commonPlugins,
+      typescript({
+        useTsconfigDeclarationDir: true,
+        tsconfigOverride: { compilerOptions: { declaration: true, declarationDir: 'dist/types' } },
+      }),
+      markAsPure(),
+    ],
   },
   cjs: {
     input: 'src/index.ts',
     output: { file: pkg.main, format: 'cjs', sourcemap: true },
     watch: { include: 'src/**' },
     external,
-    plugins: [
-      ...commonPlugins,
-      typescript({ check: false, tsconfigOverride: { compilerOptions: { declaration: false } } }),
-    ],
+    plugins: [...commonPlugins, typescript({ check: false })],
   },
 };
 

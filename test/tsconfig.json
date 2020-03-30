@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "strict": true,
+    "allowJs": true,
+    "noEmit": true,
+    "noImplicitAny": false,
+    "lib": ["es2017", "dom", "scripthost"],
+    "types": ["node", "@wdio/sync", "webdriverio", "@wdio/mocha-framework", "jest"],
+    "baseUrl": ".",
+    "paths": {
+      "*": ["./*"],
+      "examples": ["../examples/*"]
+    }
+  },
+  "include": ["."]
+}

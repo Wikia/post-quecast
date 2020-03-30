@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@wikia/post-quecast": ["../dist/module/index.js"],
+      "common": ["./common/*"]
+    }
+  }
+}
