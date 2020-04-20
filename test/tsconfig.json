@@ -7,7 +7,7 @@
     "noEmit": true,
     "noImplicitAny": false,
     "lib": ["es2017", "dom", "scripthost"],
-    "types": ["node", "@wdio/sync", "webdriverio", "@wdio/mocha-framework", "jest"],
+    "types": ["node", "@wdio/sync", "@wdio/mocha-framework", "jest"],
     "baseUrl": ".",
     "paths": {
       "*": ["./*"],
