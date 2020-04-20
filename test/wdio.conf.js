@@ -178,7 +178,6 @@ exports.config = {
    */
   before: function (capabilities, specs) {
     require('ts-node').register({ files: true, project: 'test/tsconfig.json' });
-    global.expect = require('jest-matchers');
   },
   /**
    * Runs before a WebdriverIO command gets executed.
