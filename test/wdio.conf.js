@@ -158,14 +158,25 @@ exports.config = {
   // beforeSession: function (config, capabilities, specs) {
   // },
   /**
+   * Gets executed before a worker process is spawned and can be used to initialize specific service
+   * for that worker as well as modify runtime environments in an async fashion.
+   * @param  {String} cid      capability id (e.g 0-0)
+   * @param  {[type]} caps     object containing capabilities for session that will be spawn in the worker
+   * @param  {[type]} specs    specs to be run in the worker process
+   * @param  {[type]} args     object that will be merged with the main configuration once worker is initialized
+   * @param  {[type]} execArgv list of string arguments passed to the worker process
+   */
+  onWorkerStart: function (cid, caps, specs, args, execArgv) {
+    // Makes tsconfig-paths use correct tsconfig
+    process.env.TS_NODE_PROJECT = 'test/tsconfig.json';
+  },
+  /**
    * Gets executed before test execution begins. At this point you can access to all global
    * variables like `browser`. It is the perfect place to define custom commands.
    * @param {Array.<Object>} capabilities list of capabilities details
    * @param {Array.<String>} specs List of spec file paths that are to be run
    */
   before: function (capabilities, specs) {
-    // Makes tsconfig-paths use correct tsconfig
-    process.env.TS_NODE_PROJECT = 'test/tsconfig.json';
     require('ts-node').register({ files: true, project: 'test/tsconfig.json' });
     global.expect = require('jest-matchers');
   },

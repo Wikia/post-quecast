@@ -6,7 +6,7 @@ cache:
     - ~/.cache
 
 addons:
-  chrome: stable # 80 at the time of writing
+  chrome: stable # 81 at the time of writing
 
 notifications:
   email: false
