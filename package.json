@@ -65,7 +65,7 @@
     "@wdio/sync": "^6.1.0",
     "awesome-typescript-loader": "^5.2.1",
     "chromedriver": "^81.0.0",
-    "commitizen": "4.0.3",
+    "commitizen": "4.1.2",
     "coveralls": "^3.0.9",
     "cz-conventional-changelog": "^3.1.0",
     "husky": "^4.2.3",
