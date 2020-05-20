@@ -4,7 +4,11 @@ type IFrameFull = Omit<ExamplePage, 'closeFull' | 'closeLite'>;
 type IFrameLite = Pick<ExamplePage, 'transmitter' | 'createTransmitter'>;
 
 export class Site {
-  readonly main = new ExamplePage('main', () => {
+  readonly main1 = new ExamplePage('main-1', () => {
+    browser.switchToParentFrame();
+  });
+
+  readonly main2 = new ExamplePage('main-2', () => {
     browser.switchToParentFrame();
   });
 

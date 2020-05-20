@@ -2,9 +2,9 @@ import { parser } from '../parser';
 import { readFormValues } from '../read-form-values';
 import { makeTransmitter } from './transmitter';
 
-const template = `
+const template = (id) => `
   <section class="column">
-    <div id="transmitter-creator" class="content box">
+    <div id="${id}" class="content box">
       <h5 class="title is-5">Create Transmitter</h5>
       <div class="field">
         <div class="control">
@@ -27,8 +27,9 @@ export interface TransmitterCreatorForm {
 }
 
 export function makeTransmitterCreator(sourceId: string): void {
-  document.getElementById('controls').appendChild(parser(template));
-  const element = document.getElementById('transmitter-creator');
+  const id = `${sourceId}-transmitter-creator`;
+  document.getElementById(sourceId).appendChild(parser(template(id)));
+  const element = document.getElementById(id);
   const button = element.getElementsByTagName('button')[0];
 
   button.addEventListener('click', () => {

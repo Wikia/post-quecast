@@ -3,9 +3,9 @@ import { site } from 'pages/site';
 describe('Actions History', () => {
   it('should keep history of messages', () => {
     site.bootstrap();
-    site.main.setupPostQuecast();
+    site.main1.setupPostQuecast();
 
-    const mainComA = site.main.createCommunicator({ name: 'A' });
+    const mainComA = site.main1.createCommunicator({ name: 'A' });
     const fullComA = site.iframeFull.createCommunicator({ name: 'A' });
     const liteTranA = site.iframeLite.createTransmitter({ name: 'A' });
 
@@ -14,12 +14,12 @@ describe('Actions History', () => {
     liteTranA.dispatch('1');
 
     expect(mainComA.results).toEqual([
-      { source: 'main-communicator-A', type: '1', sync: 'true', reference: 'true' },
+      { source: 'main-1-communicator-A', type: '1', sync: 'true', reference: 'true' },
       { source: 'iframe-full-communicator-A', type: '1', sync: '-', reference: 'false' },
       { source: 'iframe-lite-transmitter-A', type: '1', sync: '-', reference: 'false' },
     ]);
     expect(fullComA.results).toEqual([
-      { source: 'main-communicator-A', type: '1', sync: '-', reference: 'false' },
+      { source: 'main-1-communicator-A', type: '1', sync: '-', reference: 'false' },
       { source: 'iframe-full-communicator-A', type: '1', sync: 'false', reference: 'false' },
       { source: 'iframe-lite-transmitter-A', type: '1', sync: '-', reference: 'false' },
     ]);
@@ -27,17 +27,17 @@ describe('Actions History', () => {
     mainComA.clearResults();
     fullComA.clearResults();
 
-    const mainComB = site.main.createCommunicator({ name: 'B' });
+    const mainComB = site.main1.createCommunicator({ name: 'B' });
     const fullComB = site.iframeFull.createCommunicator({ name: 'B' });
     const liteTranB = site.iframeLite.createTransmitter({ name: 'B' });
 
     expect(mainComB.results).toEqual([
-      { source: 'main-communicator-A', type: '1', sync: '-', reference: 'true' },
+      { source: 'main-1-communicator-A', type: '1', sync: '-', reference: 'true' },
       { source: 'iframe-full-communicator-A', type: '1', sync: '-', reference: 'false' },
       { source: 'iframe-lite-transmitter-A', type: '1', sync: '-', reference: 'false' },
     ]);
     expect(fullComB.results).toEqual([
-      { source: 'main-communicator-A', type: '1', sync: '-', reference: 'false' },
+      { source: 'main-1-communicator-A', type: '1', sync: '-', reference: 'false' },
       { source: 'iframe-full-communicator-A', type: '1', sync: '-', reference: 'false' },
       { source: 'iframe-lite-transmitter-A', type: '1', sync: '-', reference: 'false' },
     ]);
@@ -50,22 +50,22 @@ describe('Actions History', () => {
     liteTranB.dispatch('1');
 
     expect(mainComA.results).toEqual([
-      { source: 'main-communicator-B', type: '1', sync: '-', reference: 'true' },
+      { source: 'main-1-communicator-B', type: '1', sync: '-', reference: 'true' },
       { source: 'iframe-full-communicator-B', type: '1', sync: '-', reference: 'false' },
       { source: 'iframe-lite-transmitter-B', type: '1', sync: '-', reference: 'false' },
     ]);
     expect(mainComB.results).toEqual([
-      { source: 'main-communicator-B', type: '1', sync: 'true', reference: 'true' },
+      { source: 'main-1-communicator-B', type: '1', sync: 'true', reference: 'true' },
       { source: 'iframe-full-communicator-B', type: '1', sync: '-', reference: 'false' },
       { source: 'iframe-lite-transmitter-B', type: '1', sync: '-', reference: 'false' },
     ]);
     expect(fullComA.results).toEqual([
-      { source: 'main-communicator-B', type: '1', sync: '-', reference: 'false' },
+      { source: 'main-1-communicator-B', type: '1', sync: '-', reference: 'false' },
       { source: 'iframe-full-communicator-B', type: '1', sync: '-', reference: 'false' },
       { source: 'iframe-lite-transmitter-B', type: '1', sync: '-', reference: 'false' },
     ]);
     expect(fullComB.results).toEqual([
-      { source: 'main-communicator-B', type: '1', sync: '-', reference: 'false' },
+      { source: 'main-1-communicator-B', type: '1', sync: '-', reference: 'false' },
       { source: 'iframe-full-communicator-B', type: '1', sync: 'false', reference: 'false' },
       { source: 'iframe-lite-transmitter-B', type: '1', sync: '-', reference: 'false' },
     ]);
@@ -75,7 +75,7 @@ describe('Actions History', () => {
     mainComB.clearResults();
     fullComB.clearResults();
 
-    const mainComOnlyNew = site.main.createCommunicator({ name: 'C', onlyNew: true });
+    const mainComOnlyNew = site.main1.createCommunicator({ name: 'C', onlyNew: true });
     const fullComOnlyNew = site.iframeFull.createCommunicator({ name: 'C', onlyNew: true });
 
     expect(mainComOnlyNew.results).toEqual([]);
