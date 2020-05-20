@@ -1,5 +1,7 @@
 import { makeTransmitterCreator } from '../common/creators/transmitter-creator';
 
 document.addEventListener('DOMContentLoaded', () => {
-  makeTransmitterCreator('iframe-lite');
+  const id = 'iframe-lite';
+
+  makeTransmitterCreator(id);
 });

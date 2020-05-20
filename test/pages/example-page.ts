@@ -11,17 +11,17 @@ export class ExamplePage {
 
   setupPostQuecast(): void {
     this.connect();
-    $('#setup-post-quecast').click();
+    $(`#${this.id}-setup-post-quecast`).click();
   }
 
   closeFull(): void {
     this.connect();
-    $('#close-full').click();
+    $(`#${this.id}-close-full`).click();
   }
 
   closeLite(): void {
     this.connect();
-    $('#close-lite').click();
+    $(`#${this.id}-close-lite`).click();
   }
 
   communicator(name: string): CommunicatorPage {
@@ -48,7 +48,7 @@ export class ExamplePage {
   }
 
   private submitCommunicatorForm(input: CommunicatorCreatorForm): void {
-    const form = $('#communicator-creator');
+    const form = $(`#${this.id}-communicator-creator`);
 
     form.$('input[name="name"]').setValue(input.name);
     !!input.channelId && form.$('input[name="channelId"]').setValue(input.channelId);
@@ -86,7 +86,7 @@ export class ExamplePage {
   }
 
   private submitTransmitterForm(input: TransmitterCreatorForm): void {
-    const form = $('#transmitter-creator');
+    const form = $(`#${this.id}-transmitter-creator`);
 
     form.$('input[name="name"]').setValue(input.name);
     !!input.channelId && form.$('input[name="channelId"]').setValue(input.channelId);

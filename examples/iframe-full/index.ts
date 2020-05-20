@@ -3,10 +3,12 @@ import { makeCommunicatorCreator } from 'common/creators/communicator-creator';
 import { makeTransmitterCreator } from '../common/creators/transmitter-creator';
 
 document.addEventListener('DOMContentLoaded', () => {
-  makeCommunicatorCreator('iframe-full');
-  makeTransmitterCreator('iframe-full');
+  const id = 'iframe-full';
 
-  document.getElementById('setup-post-quecast').addEventListener('click', () => {
+  makeCommunicatorCreator(id);
+  makeTransmitterCreator(id);
+
+  document.getElementById(`${id}-setup-post-quecast`).addEventListener('click', () => {
     setupPostQuecast();
   });
 });
