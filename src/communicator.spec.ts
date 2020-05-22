@@ -2,6 +2,7 @@ import { Communicator } from './communicator';
 import { createHostStub, HostStub } from './models/host.stub';
 import { DEFAULT_OPTIONS } from './models/options';
 import { Receiver } from './receiver';
+import { setupPostQuecast } from './setup/setup';
 import { Transmitter } from './transmitter';
 
 jest.mock('./transmitter');
@@ -32,6 +33,7 @@ describe('Communicator', () => {
 
     beforeEach(() => {
       host = createHostStub();
+      setupPostQuecast(host);
       communicator = new Communicator({ host, coordinatorHost: host });
     });
 
@@ -52,8 +54,18 @@ describe('Communicator', () => {
       });
     });
 
-    it('should bind actions$', () => {
-      expect(communicator.actions$).toBe(receiverMock.mock.instances[0].actions$);
+    it('should listen through receiver', () => {
+      const callback = () => ({});
+
+      communicator.addListener(callback);
+
+      expect(receiverMock.mock.instances[0].addListener).toHaveBeenCalledTimes(1);
+      expect(receiverMock.mock.instances[0].removeListener).toHaveBeenCalledTimes(0);
+
+      communicator.removeListener(callback);
+
+      expect(receiverMock.mock.instances[0].addListener).toHaveBeenCalledTimes(1);
+      expect(receiverMock.mock.instances[0].removeListener).toHaveBeenCalledTimes(1);
     });
   });
 });

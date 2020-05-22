@@ -1,14 +1,11 @@
-import { Subject } from 'rxjs';
-import { LIB_SUBJECT } from './constants';
 import { Host } from './host';
-import { PostMessageEvent } from './post-message-event';
+import { PostQuecastEvent } from './post-quecast-event';
 
-type Callback = (event: PostMessageEvent) => void;
+type Callback = (event: PostQuecastEvent) => void;
 export type HostStub = {
-  [key in keyof Omit<Host, '@wikia/post-quecast/subject'>]: jest.SpyInstance & Host[key];
+  [key in keyof Host]: jest.SpyInstance & Host[key];
 } & {
   listeners: Callback[];
-  ['@wikia/post-quecast/subject']: Host['@wikia/post-quecast/subject'];
 };
 
 export function createHostStub(): HostStub {
@@ -23,8 +20,8 @@ export function createHostStub(): HostStub {
 
   const removeEventListener: HostStub['removeEventListener'] = jest
     .fn()
-    .mockImplementation((listener: Callback) => {
-      const index = listeners.findIndex(value => value === listener);
+    .mockImplementation((type: string, listener: Callback) => {
+      const index = listeners.indexOf(listener);
 
       if (index !== -1) {
         listeners.splice(index, 1);
@@ -34,7 +31,7 @@ export function createHostStub(): HostStub {
   const postMessage: HostStub['postMessage'] = jest
     .fn()
     .mockImplementation((data: any, origin: string) => {
-      listeners.forEach(listener => {
+      listeners.forEach((listener) => {
         listener({ source: result, data });
       });
     });
@@ -43,7 +40,6 @@ export function createHostStub(): HostStub {
   result.addEventListener = addEventListener;
   result.removeEventListener = removeEventListener;
   result.postMessage = postMessage;
-  result[LIB_SUBJECT] = new Subject<PostMessageEvent>();
 
   return result;
 }

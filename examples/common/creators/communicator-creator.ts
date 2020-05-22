@@ -16,14 +16,6 @@ const template = (id) => `
           <input class="input" type="text" name="channelId" placeholder="Channel" />
         </div>
       </div>
-      <div class="field">
-        <div class="control">
-          <label class="checkbox">
-            <input type="checkbox" name="onlyNew" />
-            Only New
-          </label>
-        </div>
-      </div>
       <button style="margin-bottom: 15px;" type="button" class="button is-info">Submit</button>
     </div>
   </section>
@@ -32,7 +24,6 @@ const template = (id) => `
 export interface CommunicatorCreatorForm {
   name: string;
   channelId?: string;
-  onlyNew?: boolean;
 }
 
 export function makeCommunicatorCreator(sourceId: string): void {

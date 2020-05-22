@@ -1,5 +1,6 @@
-import { Subject } from 'rxjs';
-import { LIB_ID, LIB_SUBJECT } from '../models/constants';
+import { CallbackConnector } from '../connectors/connectors';
+import { LIB_ID } from '../models/constants';
+import { Host } from '../models/host';
 import { createHostStub } from '../models/host.stub';
 import { Coordinator } from './coordinator';
 import { setupPostQuecast } from './setup';
@@ -16,8 +17,8 @@ describe('setupPostQuecast', () => {
   it('should work on default host', () => {
     setupPostQuecast();
     expect(Coordinator).toHaveBeenCalledTimes(1);
-    expect((window as any)[LIB_ID] instanceof Coordinator);
-    expect((window as any)[LIB_SUBJECT] instanceof Subject);
+    expect((window as Host)[LIB_ID] instanceof Coordinator);
+    expect((window as Host)[LIB_ID].callbackConnector instanceof CallbackConnector);
   });
 
   it('should work on custom host', () => {
@@ -26,7 +27,7 @@ describe('setupPostQuecast', () => {
     setupPostQuecast(hostStub);
     expect(Coordinator).toHaveBeenCalledTimes(1);
     expect(hostStub[LIB_ID] instanceof Coordinator);
-    expect(hostStub[LIB_SUBJECT] instanceof Subject);
+    expect(hostStub[LIB_ID].callbackConnector instanceof CallbackConnector);
   });
 
   it('should work for two different hosts', () => {
@@ -37,9 +38,9 @@ describe('setupPostQuecast', () => {
     setupPostQuecast(host2);
     expect(Coordinator).toHaveBeenCalledTimes(2);
     expect(host1[LIB_ID] instanceof Coordinator);
-    expect(host1[LIB_SUBJECT] instanceof Subject);
+    expect(host1[LIB_ID].callbackConnector instanceof CallbackConnector);
     expect(host2[LIB_ID] instanceof Coordinator);
-    expect(host2[LIB_SUBJECT] instanceof Subject);
+    expect(host2[LIB_ID].callbackConnector instanceof CallbackConnector);
   });
 
   it('should be idempotent', () => {

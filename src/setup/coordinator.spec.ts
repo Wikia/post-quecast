@@ -1,6 +1,5 @@
 import { INTERNAL_TYPES, LIB_ID } from '../models/constants';
 import { createHostStub, HostStub } from '../models/host.stub';
-
 import { PostMessageData } from '../models/post-message-data';
 import { Channel } from './channel';
 import { Coordinator } from './coordinator';

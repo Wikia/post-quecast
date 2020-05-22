@@ -67,7 +67,7 @@ module.exports = (env, argv) => {
   const apps = {
     main: {
       performance: prod && {
-        maxEntrypointSize: 39.5 * 1024,
+        maxEntrypointSize: 13 * 1024,
         hints: 'error',
       },
       entry: {
@@ -77,7 +77,7 @@ module.exports = (env, argv) => {
     },
     'iframe-full': {
       performance: prod && {
-        maxEntrypointSize: 38.5 * 1024,
+        maxEntrypointSize: 13 * 1024,
         hints: 'error',
       },
       entry: {
@@ -86,7 +86,7 @@ module.exports = (env, argv) => {
     },
     'iframe-lite': {
       performance: prod && {
-        maxEntrypointSize: 6.5 * 1024,
+        maxEntrypointSize: 6 * 1024,
         hints: 'error',
       },
       entry: {

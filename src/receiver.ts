@@ -1,56 +1,100 @@
-import { merge, Observable, of } from 'rxjs';
-import { mergeMap, shareReplay, take } from 'rxjs/operators';
-import { Listener } from './connectors/listener';
-import { Sender } from './connectors/sender';
-import { Action } from './models/action';
+import { Connector } from './connectors/connectors';
+import { Action, isActionOfType } from './models/action';
 import { INTERNAL_TYPES, LIB_ID } from './models/constants';
 import { PostQuecastOptions } from './models/options';
-import { PostMessageEvent } from './models/post-message-event';
-import { mapAction } from './rxjs/map-action';
-import { ofType } from './rxjs/of-type';
-import { onlyOfChannel } from './rxjs/only-of-channel';
-import { onlyPrivate } from './rxjs/only-private';
-import { onlyPublic } from './rxjs/only-public';
+import {
+  getEventAction,
+  isEventOfChannel,
+  isEventPrivate,
+  isEventPublic,
+  PostQuecastEvent,
+} from './models/post-quecast-event';
+
+export type ActionCallback = (action: Action) => void;
 
 export class Receiver {
-  actions$: Observable<Action>;
+  private callbacks: ActionCallback[] = [];
+  private history: Action[] = [];
   private readonly channelId: string;
-  private readonly listener: Listener;
-  private readonly sender: Sender;
+  private readonly connector: Connector;
 
   constructor(options: PostQuecastOptions) {
     this.channelId = options.channelId;
-    this.listener = Listener.make(options);
-    this.sender = Sender.make(options);
+    this.connector = Connector.make(options);
     this.setupActions();
     this.setupConnection();
   }
 
   private setupActions(): void {
-    const messages$: Observable<PostMessageEvent> = this.listener.messages$.pipe(
-      onlyOfChannel(this.channelId),
-    );
+    this.getHistory();
+    this.listenEvent();
+  }
 
-    const history$ = messages$.pipe(
-      onlyPrivate(),
-      mapAction(),
-      ofType(INTERNAL_TYPES.connected),
-      take(1),
-      mergeMap(action => of(...action.history)),
-    );
+  private getHistory(): void {
+    const callback = (event: PostQuecastEvent) => {
+      if (!isEventOfChannel(event, this.channelId)) {
+        return;
+      }
 
-    const public$ = messages$.pipe(onlyPublic(), mapAction());
+      if (!isEventPrivate(event)) {
+        return;
+      }
 
-    this.actions$ = merge(history$, public$).pipe(shareReplay());
-    this.actions$.subscribe(); // start listening right away
+      const action = getEventAction(event);
+
+      if (!isActionOfType<{ history: Action[] }>(action, INTERNAL_TYPES.connected)) {
+        return;
+      }
+
+      this.connector.removeListener(callback);
+      this.handleActions(...action.history);
+    };
+
+    this.connector.addListener(callback);
+  }
+
+  private listenEvent(): void {
+    const callback = (event: PostQuecastEvent) => {
+      if (!isEventOfChannel(event, this.channelId)) {
+        return;
+      }
+
+      if (!isEventPublic(event)) {
+        return;
+      }
+
+      const action = getEventAction(event);
+
+      this.handleActions(action);
+    };
+
+    this.connector.addListener(callback);
+  }
+
+  private handleActions(...actions: Action[]): void {
+    this.history.push(...actions);
+    actions.forEach((action) => this.callbacks.forEach((cb) => cb(action)));
   }
 
   private setupConnection(): void {
-    this.sender.postMessage({
+    this.connector.dispatch({
       action: { type: INTERNAL_TYPES.connect, timestamp: Date.now() },
       channelId: this.channelId,
       private: true,
       libId: LIB_ID,
     });
+  }
+
+  addListener(cb: ActionCallback): void {
+    this.history.forEach((action) => cb(action));
+    this.callbacks.push(cb);
+  }
+
+  removeListener(cb: ActionCallback): void {
+    const index = this.callbacks.indexOf(cb);
+
+    if (index > -1) {
+      this.callbacks.splice(index, 1);
+    }
   }
 }
