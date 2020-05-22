@@ -28,11 +28,17 @@
     <a href="https://snyk.io/test/github/Wikia/post-quecast?targetFile=package.json">
         <img alt="Travis" src="https://snyk.io/test/github/Wikia/post-quecast/badge.svg?targetFile=package.json">
     </a>
+    <a href="https://bundlephobia.com/result?p=@wikia/post-quecast">
+        <img alt="Travis" src="https://badgen.net/bundlephobia/min/@wikia/post-quecast">
+    </a>
+    <a href="https://bundlephobia.com/result?p=@wikia/post-quecast">
+        <img alt="Travis" src="https://badgen.net/bundlephobia/minzip/@wikia/post-quecast">
+    </a>
 </p>
 
 Post Quecast - **Post** Message based **Que**ued Broad**cast**.
 
-It is RxJs powered lib for creating semi-distributed communication system between iframes and window instances.
+It is callback powered lib for creating semi-distributed communication system between iframes and window instances.
 The distinct feature of the lib is ability to remember (queue) messages so that it doesn't matter when a communicator is instantiated it will get full message history.
 
 It is heavily inspired by [Redux](https://redux.js.org/) and [NgRx](https://ngrx.io/) and aims to create similar API.
@@ -68,7 +74,7 @@ import { Communicator } from '@wikia/post-quecast';
 
 const communicator = new Communicator();
 
-communicator.actions$.subscribe(console.log);
+communicator.addListener(console.log);
 communicator.dispatch({ type: 'action name', ...payload });
 ```
 

@@ -56,12 +56,16 @@ It makes a use of library queueing capabilities and always returns full actions 
 ### Usage
  
  ```typescript
-import { Communicator, ofType } from '@wikia/post-quecast';
+import { Communicator, isActionOfType } from '@wikia/post-quecast';
 
 const communicator = new Communicator();
 
 // Listens for given actions
-communicator.actions$.pipe(ofType('[Docs] Test Action')).subscribe(action => console.log(action));
+communicator.addListener(action => {
+  if(isActionOfType(action, '[Docs] Test Action')) {
+    console.log(action);
+  }
+});
 
 // Dispatched an action
 communicator.dispatch({ type: '[Docs] Test Action', foo: 'bar' });
@@ -107,7 +111,11 @@ communicator.dispatch({ type: '[A] a' });
 communicator.dispatch({ type: '[A] a' });
 communicator.dispatch({ type: '[B] b' });
 
-communicator.actions$.pipe(ofType('[A] a', '[C] c')).subscribe(action => console.log(action));
+communicator.addListener(action => {
+  if(isActionOfType(action, '[A] a', '[C] c')) {
+    console.log(action);
+  }
+});
 
 communicator.dispatch({ type: '[C] c' });
 ```
@@ -118,30 +126,6 @@ We will see in the console:
 '[A] a'
 '[C] c'
 ```
-
-### onlyNew
-
-Ad mentioned in `Communicator` description, `actions$` include all actions, new and old.
-We can see that in the previous `ofType` example.
-
-Let us consider this example again but now with `onlyNew` operator:
-
-```typescript
-communicator.dispatch({ type: '[A] a' });
-communicator.dispatch({ type: '[A] a' });
-communicator.dispatch({ type: '[B] b' });
-
-communicator.actions$.pipe(onlyNew(), ofType('[A] a', '[C] c')).subscribe(action => console.log(action));
-
-communicator.dispatch({ type: '[C] c' });
-```
-
-We will see in the console:
-```
-'[C] c'
-```
-
-Because only '[C] c' was an action emitted after subscription was made.
 
 ## PostQuecastOptions
 
@@ -159,34 +143,9 @@ Because only '[C] c' was an action emitted after subscription was made.
 const communicatorA = new Communicator({channelId: 'a' });
 const communicatorB = new Communicator({channelId: 'b' });
 
-communicatorA.actions$.subscribe(action => console.log(action));
+communicatorA.addListener(action => console.log(action));
 
 communicatorB.dispatch({type: '[Docs] Test Action'});
 ```
 
 Nothing will be printed because `communicatorA` and `communicatorB` are in different channels.
-
-# Good Practices
-
-It is a common case to want to listen of an action only once and then forget about it.
-To do so use rxjs's `take` operator:
-
-```typescript
-import { ofType } from '@wikia/post-quecast';
-import { take } from 'rxjs/operators';
-
-communicator.dispatch({ type: '[A] a' });
-communicator.dispatch({ type: '[A] a' });
-communicator.dispatch({ type: '[B] b' });
-
-communicator.actions$.pipe(ofType('[A] a'), take(1)).subscribe(action => console.log(action));
-```
-
-We will see in the console:
-```
-'[A] a'
-```
-
-Because we said we want only one emittion.
-
-__Warning__: order of the operators is not accidental `ofType` goes first, followed by `take`.

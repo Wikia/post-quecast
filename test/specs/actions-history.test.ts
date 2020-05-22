@@ -75,12 +75,6 @@ describe('Actions History', () => {
     mainComB.clearResults();
     fullComB.clearResults();
 
-    const mainComOnlyNew = site.main1.createCommunicator({ name: 'C', onlyNew: true });
-    const fullComOnlyNew = site.iframeFull.createCommunicator({ name: 'C', onlyNew: true });
-
-    expect(mainComOnlyNew.results).toEqual([]);
-    expect(fullComOnlyNew.results).toEqual([]);
-
     liteTranA.dispatch('2');
 
     expect(mainComA.results).toEqual([
@@ -93,12 +87,6 @@ describe('Actions History', () => {
       { source: 'iframe-lite-transmitter-A', type: '2', sync: '-', reference: 'false' },
     ]);
     expect(fullComB.results).toEqual([
-      { source: 'iframe-lite-transmitter-A', type: '2', sync: '-', reference: 'false' },
-    ]);
-    expect(mainComOnlyNew.results).toEqual([
-      { source: 'iframe-lite-transmitter-A', type: '2', sync: '-', reference: 'false' },
-    ]);
-    expect(fullComOnlyNew.results).toEqual([
       { source: 'iframe-lite-transmitter-A', type: '2', sync: '-', reference: 'false' },
     ]);
   });

@@ -1,10 +1,12 @@
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { Action } from '../models/action';
+import { Action } from '../../src';
 import { RxJsOperator } from './rxjs-operator';
 
-export function ofType<T>(...types: string[]): RxJsOperator<Action<T>> {
+export function onlyNew<T>(): RxJsOperator<Action<T>> {
   return (source: Observable<Action<T>>): Observable<Action<T>> => {
-    return source.pipe(filter(action => types.some(type => action.type === type)));
+    const timestamp = Date.now();
+
+    return source.pipe(filter((action) => action.timestamp > timestamp));
   };
 }

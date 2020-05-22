@@ -52,13 +52,6 @@ export class ExamplePage {
 
     form.$('input[name="name"]').setValue(input.name);
     !!input.channelId && form.$('input[name="channelId"]').setValue(input.channelId);
-
-    const checkbox = form.$('input[name="onlyNew"]');
-
-    if (checkbox.isSelected() !== !!input.onlyNew) {
-      checkbox.click();
-    }
-
     form.$('button').click();
   }
 

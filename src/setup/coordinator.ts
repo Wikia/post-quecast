@@ -1,50 +1,64 @@
-import { merge, Observable } from 'rxjs';
-import { NativeListener, RxListener } from '../connectors/listener';
+import { CallbackConnector, PostMessageConnector } from '../connectors/connectors';
 import { INTERNAL_TYPES } from '../models/constants';
 import { Host } from '../models/host';
-import { PostMessageEvent } from '../models/post-message-event';
-import { ofEventType } from '../rxjs/of-event-type';
-import { onlyExternal } from '../rxjs/only-external';
-import { onlyPrivate } from '../rxjs/only-private';
+import {
+  isEventExternal,
+  isEventOfType,
+  isEventPublic,
+  PostQuecastEvent,
+} from '../models/post-quecast-event';
 import { Channel } from './channel';
 
 export class Coordinator {
+  callbackConnector: CallbackConnector;
+  private postMessageConnector: PostMessageConnector;
   private channels = new Map<string, Channel>();
-  private messages$: Observable<PostMessageEvent> = this.createMessages();
 
-  constructor(private host: Host) {}
-
-  private createMessages(): Observable<PostMessageEvent> {
-    return merge(
-      NativeListener.make(this.host).messages$,
-      RxListener.make(this.host).messages$,
-    ).pipe(onlyPrivate());
+  constructor(private coordinatorHost: Host) {
+    this.callbackConnector = new CallbackConnector(coordinatorHost);
+    this.postMessageConnector = new PostMessageConnector({
+      senderHost: coordinatorHost,
+      listenerHost: coordinatorHost,
+    });
   }
 
   init(): void {
-    this.handleConnect();
-    this.handleBroadcast();
+    const handleEvents = (event: PostQuecastEvent) => {
+      if (isEventPublic(event)) {
+        return;
+      }
+
+      this.handleConnect(event);
+      this.handleBroadcast(event);
+    };
+
+    this.callbackConnector.addListener(handleEvents);
+    this.postMessageConnector.addListener(handleEvents);
   }
 
-  private handleConnect(): void {
-    this.messages$.pipe(ofEventType(INTERNAL_TYPES.connect)).subscribe(event => {
-      const channel: Channel = this.ensureChannel(event.data.channelId);
+  private handleConnect(event: PostQuecastEvent): void {
+    if (!isEventOfType(event, INTERNAL_TYPES.connect)) {
+      return;
+    }
 
-      channel.addConnection(event.source);
-    });
+    const channel: Channel = this.ensureChannel(event.data.channelId);
+
+    channel.addConnection(event.source);
   }
 
-  private handleBroadcast(): void {
-    this.messages$.pipe(onlyExternal()).subscribe(event => {
-      const channel: Channel = this.ensureChannel(event.data.channelId);
+  private handleBroadcast(event: PostQuecastEvent): void {
+    if (!isEventExternal(event)) {
+      return;
+    }
 
-      channel.broadcast(event.data.action);
-    });
+    const channel: Channel = this.ensureChannel(event.data.channelId);
+
+    channel.broadcast(event.data.action);
   }
 
   private ensureChannel(channelId: string): Channel {
     if (!this.channels.has(channelId)) {
-      this.channels.set(channelId, new Channel(channelId, this.host));
+      this.channels.set(channelId, new Channel(channelId, this.coordinatorHost));
     }
 
     return this.channels.get(channelId);

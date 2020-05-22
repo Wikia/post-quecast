@@ -1,11 +1,11 @@
-import { Sender } from './connectors/sender';
+import { Connector } from './connectors/connectors';
 import { Action } from './models/action';
 import { LIB_ID } from './models/constants';
 import { DEFAULT_OPTIONS, PostQuecastOptions } from './models/options';
 
 export class Transmitter {
   private readonly channelId: string;
-  private readonly sender: Sender;
+  private readonly connector: Connector;
 
   constructor(_options: Partial<PostQuecastOptions> = {}) {
     const options: PostQuecastOptions = {
@@ -14,11 +14,11 @@ export class Transmitter {
     };
 
     this.channelId = options.channelId;
-    this.sender = Sender.make(options);
+    this.connector = Connector.make(options);
   }
 
   dispatch<T>(action: Action<T>): void {
-    this.sender.postMessage({
+    this.connector.dispatch({
       action: {
         ...action,
         timestamp: Date.now(),
@@ -26,6 +26,6 @@ export class Transmitter {
       channelId: this.channelId,
       private: true,
       libId: LIB_ID,
-    });
+    } as any);
   }
 }

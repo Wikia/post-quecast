@@ -1,18 +1,18 @@
-import { NativeSender, RxSender, Sender } from '../connectors/sender';
+import { Connector, PostMessageConnector } from '../connectors/connectors';
 import { Action } from '../models/action';
 import { INTERNAL_TYPES, LIB_ID } from '../models/constants';
 import { Host } from '../models/host';
 
 export class Channel {
-  private connectors = new Map<Host, Sender>();
+  private connectors = new Map<Host, Connector>();
   private history: Action[] = [];
 
-  constructor(private channelId: string, private host: Host) {
-    this.connectors.set(this.host, RxSender.make(this.host));
+  constructor(private channelId: string, coordinatorHost: Host) {
+    this.connectors.set(coordinatorHost, coordinatorHost[LIB_ID].callbackConnector);
   }
 
   addConnection(connection: Host): void {
-    this.ensurePostMessage(connection).postMessage({
+    this.ensureConnector(connection).dispatch({
       action: this.createConnectedAction(),
       private: true,
       channelId: this.channelId,
@@ -30,14 +30,17 @@ export class Channel {
 
   broadcast<T>(action: Action<T>): void {
     this.history.push(action);
-    this.connectors.forEach(sender => {
-      sender.postMessage({ action, channelId: this.channelId, libId: LIB_ID });
+    this.connectors.forEach((connector) => {
+      connector.dispatch({ action, channelId: this.channelId, libId: LIB_ID });
     });
   }
 
-  private ensurePostMessage(connection: Host): Sender {
+  private ensureConnector(connection: Host): Connector {
     if (!this.connectors.has(connection)) {
-      this.connectors.set(connection, NativeSender.make(connection));
+      this.connectors.set(
+        connection,
+        new PostMessageConnector({ senderHost: connection, listenerHost: connection }),
+      );
     }
 
     return this.connectors.get(connection);
