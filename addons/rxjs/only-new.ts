@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { Action } from '../../src';
+import { Action } from '@wikia/post-quecast';
 import { RxJsOperator } from './rxjs-operator';
 
 export function onlyNew<T>(): RxJsOperator<Action<T>> {

@@ -1,6 +1,6 @@
 import { fromEventPattern, Observable } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
-import { Action, Communicator } from '../../src';
+import { Action, Communicator } from '@wikia/post-quecast';
 
 type Options = ConstructorParameters<typeof Communicator>[0];
 

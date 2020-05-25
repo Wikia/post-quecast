@@ -1,4 +1,4 @@
-import { Action, setupPostQuecast } from '../../src';
+import { Action, setupPostQuecast } from '@wikia/post-quecast';
 import { createHostStub, HostStub } from '../../src/models/host.stub';
 import { RxCommunicator } from './rx-communicator';
 

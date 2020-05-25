@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@wikia/post-quecast": ["../src/index.ts"]
+    }
+  },
+  "include": ["."]
+}
