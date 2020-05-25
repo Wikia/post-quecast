@@ -15,7 +15,7 @@ install: npm ci
 
 jobs:
   include:
-    - stage: 'Test'
+    - stage: 'test'
       node_js: lts/*
       script:
         - npm run build
@@ -23,8 +23,8 @@ jobs:
         - npm run test:prod && npm run report-coverage
         - npm run e2e:ci
 
-    - stage: 'Release'
-      if: branch = master AND type = push
+    - stage: 'deploy'
+      if: type = push AND branch = master OR branch = alpha OR branch = beta
       node_js: lts/*
       script: skip
       deploy:
@@ -32,4 +32,4 @@ jobs:
         skip_cleanup: true
         script: npx semantic-release
         on:
-          branch: master
+          all_branches: true
