@@ -80,6 +80,8 @@ communicator.dispatch({ type: 'action name', ...payload });
 
 More detailed explanation can be found in [API section](./docs/README.md).
 
+More advanced examples on how to integrate PostQuecast with things like RxJs and be found in [Addons Section](./addons/README.md).
+
 ## Restrictions
 
 - `setupPostQuecast` needs to be called before anything else.

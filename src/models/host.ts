@@ -5,5 +5,5 @@ export interface Host {
   addEventListener: Window['addEventListener'];
   removeEventListener: Window['removeEventListener'];
   postMessage: Window['postMessage'];
-  [LIB_ID]?: Coordinator; // TODO: fix circular dependency by introducing interface
+  [LIB_ID]?: Coordinator;
 }
