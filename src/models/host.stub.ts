@@ -8,6 +8,15 @@ export type HostStub = {
   listeners: Callback[];
 };
 
+export function transformIntoHostStub(input: object): asserts input is HostStub {
+  const stub = createHostStub();
+
+  Object.keys(stub).forEach((key) => {
+    // @ts-ignore
+    input[key] = stub[key];
+  });
+}
+
 export function createHostStub(): HostStub {
   const result: HostStub = {} as any;
   const listeners: Callback[] = [];
