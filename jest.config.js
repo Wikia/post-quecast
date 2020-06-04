@@ -11,7 +11,7 @@ module.exports = {
       displayName: 'addons',
       roots: ['<rootDir>/addons'],
       transform: {
-        '^.+\\.tsx?$': 'ts-jest',
+        '^.+\\.[t,j]sx?$': 'ts-jest',
       },
       globals: {
         'ts-jest': {
@@ -25,7 +25,7 @@ module.exports = {
   ],
   collectCoverageFrom: [
     'src/**/*.ts',
-    'addons/**/*.ts',
+    'addons/**/*.[t,j]s',
     '!src/index.ts',
     '!src/**/*.stub.ts',
     '!src/models/host.ts', // there is only interface there, jest is incorrectly interpreting it
