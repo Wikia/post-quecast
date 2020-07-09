@@ -48,11 +48,7 @@ export class CallbackConnector implements Connector {
   }
 
   removeListener(cb: PostQuecastCallback): void {
-    const index = this.callbacks.indexOf(cb);
-
-    if (index > -1) {
-      this.callbacks.splice(index, 1);
-    }
+    this.callbacks = this.callbacks.filter((_cb) => _cb !== cb);
   }
 }
 

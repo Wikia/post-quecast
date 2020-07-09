@@ -1,4 +1,4 @@
-import { Action } from './models/action';
+import { Action, isActionOfType } from './models/action';
 import { INTERNAL_TYPES, LIB_ID } from './models/constants';
 import { createHostStub, HostStub } from './models/host.stub';
 import { PostMessageData } from './models/post-message-data';
@@ -146,16 +146,37 @@ describe('Receiver', () => {
 
   it('should stop listening after removeListener', () => {
     const receiver = new Receiver({ host: childHost, coordinatorHost, channelId: '1' });
-    const results: Action[] = [];
-    const listener = (a: Action) => results.push(a);
+    const firstResults: Action[] = [];
+    const secondResults: Action[] = [];
+    const first = (a: Action) => {
+      if (!isActionOfType(a, 'first')) {
+        return;
+      }
+      receiver.removeListener(first);
+      firstResults.push(a);
+    };
 
-    receiver.addListener(listener);
-    childHost.postMessage(createMessage(action), '*');
-    receiver.removeListener(listener);
-    childHost.postMessage(createMessage(action), '*');
+    const second = (a: Action) => {
+      if (!isActionOfType(a, 'second')) {
+        return;
+      }
+      receiver.removeListener(second);
+      secondResults.push(a);
+    };
 
-    expect(results).toEqual([action]);
-    receiver.removeListener(listener);
+    receiver.addListener(first);
+    receiver.addListener(second);
+
+    childHost.postMessage(createMessage(action), '*');
+    childHost.postMessage(createMessage({ type: 'second', timestamp: 10 }), '*');
+    childHost.postMessage(createMessage({ type: 'first', timestamp: 10 }), '*');
+    childHost.postMessage(createMessage({ type: 'second', timestamp: 10 }), '*');
+    childHost.postMessage(createMessage({ type: 'first', timestamp: 10 }), '*');
+
+    expect(secondResults.map((a) => a.type)).toEqual(['second']);
+    expect(firstResults.map((a) => a.type)).toEqual(['first']);
+
+    receiver.removeListener(first);
   });
 });
 
