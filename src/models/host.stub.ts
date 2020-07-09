@@ -19,7 +19,7 @@ export function transformIntoHostStub(input: object): asserts input is HostStub 
 
 export function createHostStub(): HostStub {
   const result: HostStub = {} as any;
-  const listeners: Callback[] = [];
+  let listeners: Callback[] = [];
 
   const addEventListener: HostStub['addEventListener'] = jest
     .fn()
@@ -30,11 +30,7 @@ export function createHostStub(): HostStub {
   const removeEventListener: HostStub['removeEventListener'] = jest
     .fn()
     .mockImplementation((type: string, listener: Callback) => {
-      const index = listeners.indexOf(listener);
-
-      if (index !== -1) {
-        listeners.splice(index, 1);
-      }
+      listeners = listeners.filter((_listener) => _listener !== listener);
     });
 
   const postMessage: HostStub['postMessage'] = jest
