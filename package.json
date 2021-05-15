@@ -67,7 +67,7 @@
     "commitizen": "^4.1.2",
     "coveralls": "^3.1.0",
     "cz-conventional-changelog": "^3.2.0",
-    "husky": "^4.2.5",
+    "husky": "6.0.0",
     "jest": "^26.1.0",
     "lint-staged": "^10.2.11",
     "mocha": "^8.0.1",
