@@ -54,7 +54,7 @@
   "devDependencies": {
     "@commitlint/cli": "^9.0.1",
     "@commitlint/config-conventional": "^9.0.1",
-    "@types/jest": "^26.0.4",
+    "@types/jest": "26.0.24",
     "@types/mocha": "^7.0.2",
     "@types/node": "^12.12.6",
     "@wdio/cli": "^6.1.25",
