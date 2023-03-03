@@ -2,6 +2,7 @@ module.exports = {
   projects: [
     {
       displayName: 'src',
+      testEnvironment: 'jsdom',
       roots: ['<rootDir>/src'],
       transform: {
         '^.+\\.tsx?$': 'ts-jest',
@@ -9,6 +10,7 @@ module.exports = {
     },
     {
       displayName: 'addons',
+      testEnvironment: 'jsdom',
       roots: ['<rootDir>/addons'],
       transform: {
         '^.+\\.[t,j]sx?$': 'ts-jest',
