@@ -14,7 +14,7 @@ export function markAsPure() {
   return {
     renderChunk(code) {
       return {
-        code: code.replace(/^(var .+) = /gm, match => match.replace(' = ', ' = /*@__PURE__*/ ')),
+        code: code.replace(/^(var .+) = /gm, (match) => match.replace(' = ', ' = /*@__PURE__*/ ')),
         map: null,
       };
     },
