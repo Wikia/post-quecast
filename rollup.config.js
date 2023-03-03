@@ -57,7 +57,7 @@ const targets = {
     output: { file: pkg.main, format: 'cjs', sourcemap: true },
     watch: { include: 'src/**' },
     external,
-    plugins: [...commonPlugins, typescript({ check: false })],
+    plugins: [...commonPlugins, typescript()],
   },
 };
 

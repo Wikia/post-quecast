@@ -1,5 +1,5 @@
 const path = require('path');
-const { TsConfigPathsPlugin } = require('awesome-typescript-loader');
+const TsConfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 const TSCONFIG = path.resolve(__dirname, 'tsconfig.json');
 const DIST_TSCONFIG = path.resolve(__dirname, 'tsconfig.dist.json');
@@ -7,7 +7,7 @@ const SRC = path.resolve(__dirname, '..', 'src');
 const NODE_MODULES = path.resolve(__dirname, '..', 'node_modules');
 
 const config = ({ name, prod, performance, entry }) => {
-  const pathPlugin = new TsConfigPathsPlugin({ configFileName: prod ? DIST_TSCONFIG : TSCONFIG });
+  const pathPlugin = new TsConfigPathsPlugin({ configFile: prod ? DIST_TSCONFIG : TSCONFIG });
 
   return {
     mode: 'development',
@@ -24,8 +24,7 @@ const config = ({ name, prod, performance, entry }) => {
 
     devServer: {
       port: 8080,
-      inline: false,
-      contentBase: __dirname,
+      static: __dirname,
     },
 
     resolve: {
@@ -48,9 +47,9 @@ const config = ({ name, prod, performance, entry }) => {
           exclude: [/node_modules/],
           use: [
             {
-              loader: 'awesome-typescript-loader',
+              loader: 'ts-loader',
               options: {
-                configFileName: TSCONFIG,
+                configFile: TSCONFIG,
               },
             },
           ],
