@@ -1,4 +1,4 @@
-import { site } from 'pages/site';
+import { site } from '../pages/site';
 
 describe('Two Mains', () => {
   it('should work when immediately dispatching', () => {

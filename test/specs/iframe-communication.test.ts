@@ -1,4 +1,4 @@
-import { site } from 'pages/site';
+import { site } from '../pages/site';
 
 describe('IFrame Communication', () => {
   it('should work between all pages', () => {

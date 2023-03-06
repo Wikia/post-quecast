@@ -1,4 +1,4 @@
-import { site } from 'pages/site';
+import { site } from '../pages/site';
 
 describe('Setup Post Quecast', () => {
   it('should start working after calling setupPostQuecast', () => {
