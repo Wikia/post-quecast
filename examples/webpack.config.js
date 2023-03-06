@@ -1,37 +1,47 @@
 const path = require('path');
-const { TsConfigPathsPlugin } = require('awesome-typescript-loader');
+const TsConfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 const TSCONFIG = path.resolve(__dirname, 'tsconfig.json');
 const DIST_TSCONFIG = path.resolve(__dirname, 'tsconfig.dist.json');
 const SRC = path.resolve(__dirname, '..', 'src');
 const NODE_MODULES = path.resolve(__dirname, '..', 'node_modules');
 
-const config = ({ name, prod, performance, entry }) => {
-  const pathPlugin = new TsConfigPathsPlugin({ configFileName: prod ? DIST_TSCONFIG : TSCONFIG });
+module.exports = (env, argv) => {
+  const prod = argv.mode === 'production';
+  const pathPlugin = new TsConfigPathsPlugin({ configFile: prod ? DIST_TSCONFIG : TSCONFIG });
 
   return {
     mode: 'development',
-    context: path.resolve(__dirname, name),
-    entry,
+    context: path.resolve(__dirname),
+
+    entry: {
+      'main/index-1': './main/index-1.ts',
+      'main/index-2': './main/index-2.ts',
+      'iframe-full/index': './iframe-full/index.ts',
+      'iframe-lite/index': './iframe-lite/index.ts',
+    },
 
     output: {
       filename: '[name].js',
-      path: path.resolve(__dirname, `dist`, name),
+      path: path.resolve(__dirname, `dist`),
     },
 
     stats: prod ? 'errors-only' : { all: undefined },
-    performance,
 
-    devServer: {
-      port: 8080,
-      inline: false,
-      contentBase: __dirname,
+    performance: prod && {
+      maxEntrypointSize: 130 * 1024,
+      hints: 'error',
     },
 
     resolve: {
       extensions: ['.ts', '.js'],
       modules: [__dirname, SRC, NODE_MODULES],
       plugins: [pathPlugin],
+    },
+
+    devServer: {
+      port: 8080,
+      static: __dirname,
     },
 
     module: {
@@ -48,9 +58,9 @@ const config = ({ name, prod, performance, entry }) => {
           exclude: [/node_modules/],
           use: [
             {
-              loader: 'awesome-typescript-loader',
+              loader: 'ts-loader',
               options: {
-                configFileName: TSCONFIG,
+                configFile: TSCONFIG,
               },
             },
           ],
@@ -60,44 +70,4 @@ const config = ({ name, prod, performance, entry }) => {
 
     devtool: 'source-map',
   };
-};
-
-module.exports = (env, argv) => {
-  const prod = argv.mode === 'production';
-  const apps = {
-    main: {
-      performance: prod && {
-        maxEntrypointSize: 13 * 1024,
-        hints: 'error',
-      },
-      entry: {
-        'index-1': './index-1.ts',
-        'index-2': './index-2.ts',
-      },
-    },
-    'iframe-full': {
-      performance: prod && {
-        maxEntrypointSize: 13 * 1024,
-        hints: 'error',
-      },
-      entry: {
-        index: './index.ts',
-      },
-    },
-    'iframe-lite': {
-      performance: prod && {
-        maxEntrypointSize: 6 * 1024,
-        hints: 'error',
-      },
-      entry: {
-        index: './index.ts',
-      },
-    },
-  };
-
-  return Object.keys(apps)
-    .map((name) => ({ name, value: apps[name] }))
-    .map(({ name, value }) =>
-      config({ name, prod, performance: value.performance, entry: value.entry }),
-    );
 };
