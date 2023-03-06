@@ -47,8 +47,8 @@
     "e2e:ci": "start-server-and-test examples:prod http://localhost:8080 e2e:headless",
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
     "examples:dev": "webpack-dev-server --config ./examples/webpack.config.js --progress",
-    "examples:prod": "webpack-dev-server --config ./examples/webpack.config.js -p --silent",
-    "examples:build": "webpack --config ./examples/webpack.config.js -p",
+    "examples:prod": "webpack-dev-server --config ./examples/webpack.config.js --mode=production",
+    "examples:build": "webpack --config ./examples/webpack.config.js --mode=production",
     "commit": "git-cz",
     "semantic-release": "semantic-release"
   },
