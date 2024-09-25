@@ -8,6 +8,6 @@ export interface PostQuecastOptions {
 
 export const DEFAULT_OPTIONS: PostQuecastOptions = {
   channelId: 'default',
-  host: window,
-  coordinatorHost: window.top,
+  host: typeof window !== 'undefined' ? window : null,
+  coordinatorHost: typeof window !== 'undefined' ? window.top : null,
 };
