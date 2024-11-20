@@ -19,7 +19,7 @@ exports.config = {
   // NPM script (see https://docs.npmjs.com/cli/run-script) then the current working
   // directory is where your package.json resides, so `wdio` will be called from there.
   //
-  specs: ['./test/specs/**/*.ts'],
+  specs: [__dirname + '/specs/**/*.test.ts'],
   // Patterns to exclude.
   exclude: [
     // 'path/to/excluded/files'
@@ -129,7 +129,6 @@ exports.config = {
   // Options to be passed to Mocha.
   // See the full list at http://mochajs.org/
   mochaOpts: {
-    compilers: ['tsconfig-paths/register'],
     ui: 'bdd',
     timeout: 60000,
   },

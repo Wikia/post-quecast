@@ -1,4 +1,4 @@
-import { site } from 'pages/site';
+import { site } from '../pages/site';
 
 describe('Actions History', () => {
   it('should keep history of messages', () => {
